@@ -1,0 +1,34 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    image: forever-backend:1.0
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      # Add required variables, for example:
+      # MONGODB_URI: ${MONGODB_URI}
+      JWT_SECRET: 51046bbd0b13e57d4b125ef6c4ea3eec4d076a1971575c54ec5936c0046156fc7b231adfb08bce57b51bb03f21d6e11e58647962c3c14fbb69dfe193c3fa9301
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+    image: forever-frontend:1.0
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  admin:
+    build:
+      context: ./admin
+    image: forever-admin:1.0
+    ports:
+      - "8081:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
